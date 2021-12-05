@@ -16,6 +16,8 @@ This partial renders flash messages on every page.
     <% flash.each do |key, value| -%>
       <div
         class="flash flash-<%= key %>"
+        data-controller="flash"
+        data-action="click->flash#hide"
       >
         <%= value.html_safe %>
       </div>
