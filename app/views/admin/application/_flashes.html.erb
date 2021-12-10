@@ -11,16 +11,14 @@ This partial renders flash messages on every page.
   and the values are the message to be displayed.
 %>
 
-<% if flash.any? %>
-  <div class="flashes">
-    <% flash.each do |key, value| -%>
-      <div
-        class="flash flash-<%= key %>"
-        data-controller="flash"
-        data-action="click->flash#hide"
-      >
-        <%= value.html_safe %>
-      </div>
-    <% end -%>
-  </div>
-<% end %>
+<div class="flashes">
+  <% flash.each do |key, value| -%>
+    <div
+      class="flash flash-<%= key %>"
+      data-controller="flash"
+      data-action="click->flash#hide"
+    >
+      <%= value.html_safe %>
+    </div>
+  <% end -%>
+</div>
