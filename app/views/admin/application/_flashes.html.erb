@@ -11,11 +11,11 @@ This partial renders flash messages on every page.
   and the values are the message to be displayed.
 %>
 
-<div class="flashes">
+<div class="<%= HtmlSelectorsHelper::FLASHES %>">
   <% flash.each do |key, value| -%>
     <div
       class="flash flash-<%= key %>"
-      data-controller="flash"
+      data-controller="<%= StimulusControllersHelper::FLASH %>"
       data-action="click->flash#hide"
     >
       <%= value.html_safe %>
