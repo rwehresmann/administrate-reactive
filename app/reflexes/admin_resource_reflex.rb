@@ -7,6 +7,33 @@ class AdminResourceReflex < StimulusReflex::Reflex
     end
   end
 
+  def sort
+    search_term = request.params[:search].to_s.strip
+    resources = Administrate::Search.new(
+      resource_class.default_scoped,
+      dashboard_class,
+      search_term
+    ).run
+    resources = apply_collection_includes(resources)
+    resources = order.apply(resources)
+    resources = resources.page(request.params[:_page]).per(records_per_page)
+    page = Administrate::Page::Collection.new(dashboard, order: order)
+
+    morph(
+      "#resources-table", 
+      render(
+        partial: "admin/application/collection", 
+        locals: {
+          collection_presenter: page,
+          collection_field_name: resource_name,
+          page: page,
+          resources: resources,
+          table_title: "page-title"
+        }
+      )
+    )
+  end
+
   private
 
   def requested_resource

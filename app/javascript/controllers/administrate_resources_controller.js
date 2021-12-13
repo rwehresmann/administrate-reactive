@@ -11,4 +11,10 @@ export default class extends ApplicationController {
       this.stimulate("AdminResourceReflex#destroy", event.currentTarget);
     }
   }
+
+  sort(event) {
+    event.preventDefault();
+
+    this.stimulate("AdminResourceReflex#sort", event.currentTarget);
+  }
 }
