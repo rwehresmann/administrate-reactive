@@ -5,6 +5,8 @@ class AdminResourceReflex < StimulusReflex::Reflex
     else
       flash[:error] = requested_resource.errors.full_messages.join("<br/>")
     end
+  rescue   => _error
+    flash[:error] = "#{resource_name.to_s.capitalize.split("_").join(" ")} is still referenced by another table."
   end
 
   def sort
@@ -96,7 +98,7 @@ class AdminResourceReflex < StimulusReflex::Reflex
   end
 
   def controller_class
-    ActiveSupport::Inflector.constantize("#{controller_path.split("/").map(&:capitalize).join("::")}Controller")
+    ActiveSupport::Inflector.constantize("#{controller_path.camelize}Controller")
   end
 
   def apply_collection_includes(relation)
