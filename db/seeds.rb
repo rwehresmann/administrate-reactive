@@ -8,7 +8,7 @@ sales_point = SalesPoint.create!(
 
 alphabet = %i[A B C D E F G H I J K L M N O N P Q R S T U V W X Y Z]
 
-10.times do 
+40.times do 
   s = alphabet.shuffle.sample(5).join
 
   product = Product.create!(
