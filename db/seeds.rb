@@ -6,8 +6,14 @@ sales_point = SalesPoint.create!(
   shop: shop
 )
 
-product = Product.create!(
-  name: "Crypto Wallet ABC", 
-  price: 400,
-  sales_point: sales_point
-)
+alphabet = %i[A B C D E F G H I J K L M N O N P Q R S T U V W X Y Z]
+
+40.times do 
+  s = alphabet.shuffle.sample(5).join
+
+  product = Product.create!(
+    name: "Crypto Wallet #{s}", 
+    price: 400,
+    sales_point: sales_point
+  )
+end

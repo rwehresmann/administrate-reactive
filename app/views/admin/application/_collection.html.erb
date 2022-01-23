@@ -18,7 +18,7 @@ to display a collection of resources in an HTML table.
 [1]: http://www.rubydoc.info/gems/administrate/Administrate/Page/Collection
 %>
 
-<table aria-labelledby="<%= table_title %>">
+<table aria-labelledby="<%= table_title %>" id="<%= CollectionHelper.collection_id(page, collection_field_name) %>">
   <thead>
     <tr>
       <% collection_presenter.attribute_types.each do |attr_name, attr_type| %>
@@ -28,9 +28,13 @@ to display a collection of resources in an HTML table.
         scope="col"
         role="columnheader"
         aria-sort="<%= sort_order(collection_presenter.ordered_html_class(attr_name)) %>">
-        <%= link_to(sanitized_order_params(page, collection_field_name).merge(
-          collection_presenter.order_params_for(attr_name, key: collection_field_name)
-        )) do %>
+
+        <% search = sanitized_order_params(page, collection_field_name).merge(
+            collection_presenter.order_params_for(attr_name, key: collection_field_name)
+          ).to_h # e.g., => {"products"=>{"order"=>:sales_point, "direction"=>:asc}} 
+        %>
+
+        <%= link_to("#", data: CollectionHelper.collection_item_data_attributes(search, collection_field_name, page, resources)) do %>
         <%= t(
           "helpers.label.#{collection_presenter.resource_name}.#{attr_name}",
           default: resource_class.human_attribute_name(attr_name),
