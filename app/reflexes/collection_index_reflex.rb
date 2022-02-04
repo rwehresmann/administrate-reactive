@@ -1,4 +1,6 @@
 class CollectionIndexReflex < StimulusReflex::Reflex
+  before_reflex { @utils = CollectionReflexUtils.new(controller_path, element) }
+  
   def sort    
     page = Administrate::Page::Collection.new(dashboard, order: order)
     collection_field_name = element.dataset.resource
@@ -24,43 +26,18 @@ class CollectionIndexReflex < StimulusReflex::Reflex
 
   private
 
+  delegate(
+    :dashboard,
+    :apply_collection_includes,
+    :order,
+    to: :@utils
+  )
+
   def requested_resource
     @requested_resource ||= element.signed[:resource_id]
   end
 
-  def dashboard
-    @dashboard ||= dashboard_class.new
-  end
-
-  delegate :dashboard_class, to: :resource_resolver
-
-  def resource_resolver
-    @resource_resolver ||= Administrate::ResourceResolver.new(controller_path)
-  end
-
   def controller_path
     request.params.fetch("controller")
-  end
-
-  def order
-    @order ||= Administrate::Order.new(sorting_attribute, sorting_direction)
-  end
-
-  def sorting_params
-    { order: element.dataset.order, direction: element.dataset.direction }
-  end
-
-  def sorting_attribute
-    sorting_params.fetch(:order, nil)
-  end
-
-  def sorting_direction
-    sorting_params.fetch(:direction, nil)
-  end
-
-  def apply_collection_includes(relation)
-    resource_includes = dashboard.collection_includes
-    return relation if resource_includes.empty?
-    relation.includes(*resource_includes)
   end
 end
